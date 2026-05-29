@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: member-form
+    env: python
+    region: singapore
+    buildCommand: pip install -r requirements.txt
+    startCommand: python app.py --prod
+    envVars:
+      - key: SECRET_KEY
+        generateValue: true
+      - key: ADMIN_PASSWORD
+        value: admin123
+      - key: PORT
+        value: "5000"
+    autoDeploy: true
