@@ -1,0 +1,16 @@
+# 数据库文件（含敏感数据，不提交）
+data/*.db
+
+# 临时导出文件
+data/_export_*.xlsx
+
+# Python
+__pycache__/
+*.pyc
+
+# 环境变量
+.env
+
+# IDE
+.vscode/
+.idea/

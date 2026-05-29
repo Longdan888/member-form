@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>管理后台 - 会员信息</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
+    <style>
+        body {
+            background: #f5f6fa;
+            padding: 1rem;
+        }
+        .admin-header {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            gap: 0.5rem;
+        }
+        .admin-header h1 {
+            margin: 0;
+            font-size: 1.3rem;
+            color: #2c3e50;
+        }
+        .btn-group {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+        .btn-group a {
+            text-decoration: none;
+            font-size: 0.85rem;
+            padding: 0.45rem 1rem;
+            border-radius: 6px;
+            background: #3498db;
+            color: #fff;
+            font-weight: 600;
+        }
+        .btn-group a:hover { opacity: 0.85; color: #fff; }
+        .btn-group a.btn-green { background: #27ae60; }
+        .btn-group a.btn-orange { background: #e67e22; }
+        .btn-group a.btn-purple { background: #8e44ad; }
+        .btn-group a.btn-red { background: #e74c3c; }
+        .btn-group a.btn-teal { background: #1abc9c; }
+        .btn-group a.btn-dark { background: #2c3e50; }
+
+        .stats-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+            margin-bottom: 1.5rem;
+        }
+        .stat-card {
+            background: #fff;
+            border-radius: 10px;
+            padding: 0.8rem 1.2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            min-width: 100px;
+        }
+        .stat-card .num {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #2c3e50;
+        }
+        .stat-card .label {
+            font-size: 0.75rem;
+            color: #888;
+        }
+
+        .table-wrap {
+            background: #fff;
+            border-radius: 10px;
+            padding: 1rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            overflow-x: auto;
+        }
+        table {
+            font-size: 0.85rem;
+            margin: 0;
+        }
+        table th {
+            white-space: nowrap;
+            background: #f8f9fa;
+            position: sticky;
+            top: 0;
+        }
+        table td {
+            white-space: nowrap;
+        }
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: #aaa;
+        }
+        footer {
+            text-align: center;
+            margin-top: 1.5rem;
+            color: #bbb;
+            font-size: 0.75rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-header">
+        <h1>📊 会员信息管理后台</h1>
+        <div class="btn-group">
+            <a href="/admin/download" class="btn-green">📥 下载全部Excel</a>
+            <a href="/form" class="btn-dark" target="_blank">🔗 打开登记表单</a>
+            <a href="/admin/logout" class="btn-red" style="font-size:0.8rem;">🚪 退出登录</a>
+        </div>
+    </div>
+
+    <!-- Flash 消息 -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    {% for category, message in messages %}
+    <div style="padding:0.5rem 1rem; margin-bottom:0.8rem; border-radius:8px;
+        {% if category == 'success' %}background:#d4edda;color:#155724;{% elif category == 'error' %}background:#f8d7da;color:#721c24;{% else %}background:#d1ecf1;color:#0c5460;{% endif %}">
+        {{ message }}
+    </div>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+
+    <!-- 统计卡片 -->
+    <div class="stats-bar">
+        <div class="stat-card">
+            <div class="num">{{ total }}</div>
+            <div class="label">📋 总提交数</div>
+        </div>
+        {% for mtype, count in stats.items() %}
+        <div class="stat-card">
+            <div class="num">{{ count }}</div>
+            <div class="label">{{ mtype }}</div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- 按类型导出 -->
+    <div class="btn-group" style="margin-bottom: 1rem;">
+        <span style="line-height:2; color:#666; font-size:0.8rem;">按类型导出：</span>
+        {% for mtype in ['88VIP','京东Plus','i茅台','龙蛋业务','AD钙','其他'] %}
+        <a href="/admin/export/{{ mtype }}" class="btn-purple" style="font-size:0.75rem;">{{ mtype }}</a>
+        {% endfor %}
+    </div>
+
+    <!-- 数据表格 -->
+    <div class="table-wrap">
+        {% if rows %}
+        <table class="striped">
+            <thead>
+                <tr>
+                    {% for header in headers %}
+                    <th>{{ header }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in rows %}
+                <tr>
+                    {% for cell in row %}
+                    <td>{{ cell if cell else '' }}</td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <div class="empty-state">📭 暂无提交数据</div>
+        {% endif %}
+    </div>
+
+    <footer>刷新查看最新数据 · {{ rows|length }} 条记录</footer>
+</body>
+</html>

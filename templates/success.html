@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>提交成功</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
+    <style>
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .card {
+            max-width: 420px;
+            background: #fff;
+            border-radius: 16px;
+            padding: 2.5rem 2rem;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+        }
+        .check-icon {
+            font-size: 4rem;
+            margin-bottom: 0.5rem;
+        }
+        .card h1 {
+            color: #11998e;
+            font-size: 1.4rem;
+            margin-bottom: 0.5rem;
+        }
+        .card .name-highlight {
+            color: #333;
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+        .card p {
+            color: #666;
+            font-size: 0.9rem;
+            margin: 0.5rem 0;
+        }
+        .card .divider {
+            border-top: 1px solid #eee;
+            margin: 1.2rem 0;
+        }
+        .card .note {
+            color: #999;
+            font-size: 0.78rem;
+        }
+        .btn-back {
+            display: inline-block;
+            margin-top: 1rem;
+            padding: 0.6rem 1.8rem;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #11998e, #38ef7d);
+            color: #fff;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        .btn-back:hover {
+            opacity: 0.9;
+            color: #fff;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="check-icon">✅</div>
+        <h1>提交成功！</h1>
+        <p><span class="name-highlight">{{ name }}</span>，感谢您的登记</p>
+        <p>您的信息已成功提交，工作人员将尽快与您联系确认。</p>
+        <div class="divider"></div>
+        <p class="note">如需修改信息，请联系工作人员。</p>
+        <a href="/form" class="btn-back">返 回</a>
+    </div>
+</body>
+</html>

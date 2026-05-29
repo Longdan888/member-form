@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>管理后台 - 登录</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
+    <style>
+        :root {
+            --pico-font-size: 16px;
+        }
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+        .login-box {
+            background: #fff;
+            border-radius: 16px;
+            padding: 2.5rem 2rem;
+            max-width: 380px;
+            width: 100%;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+        .login-box h1 {
+            color: #2c3e50;
+            font-size: 1.3rem;
+            margin-bottom: 0.25rem;
+        }
+        .login-box .subtitle {
+            color: #888;
+            font-size: 0.85rem;
+            margin-bottom: 1.5rem;
+        }
+        .login-box label {
+            text-align: left;
+            font-weight: 600;
+            color: #333;
+        }
+        .login-box input {
+            border-radius: 8px;
+            border: 1.5px solid #ddd;
+            transition: border-color 0.2s;
+        }
+        .login-box input:focus {
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52,152,219,0.15);
+            outline: none;
+        }
+        .login-box button {
+            width: 100%;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #2c3e50, #3498db);
+            border: none;
+            padding: 0.85rem;
+            font-size: 1.05rem;
+            font-weight: 600;
+            margin-top: 0.5rem;
+        }
+        .login-box button:hover {
+            opacity: 0.9;
+        }
+        .flash-msg {
+            border-radius: 8px;
+            padding: 0.6rem 1rem;
+            margin-bottom: 1rem;
+            font-size: 0.85rem;
+            text-align: left;
+        }
+        .flash-error {
+            background: #fff0f0;
+            color: #c0392b;
+            border: 1px solid #fcc;
+        }
+        .flash-success {
+            background: #f0fff0;
+            color: #27ae60;
+            border: 1px solid #cfc;
+        }
+        .flash-warning {
+            background: #fffef0;
+            color: #e67e22;
+            border: 1px solid #ffc;
+        }
+        .flash-info {
+            background: #f0f8ff;
+            color: #2980b9;
+            border: 1px solid #ccf;
+        }
+        .back-link {
+            display: block;
+            margin-top: 1rem;
+            color: #888;
+            font-size: 0.8rem;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            color: #3498db;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-box">
+        <h1>🔐 管理后台</h1>
+        <p class="subtitle">请输入管理密码以继续</p>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        {% for category, message in messages %}
+        <div class="flash-msg flash-{{ category }}">{{ message }}</div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+
+        <form method="POST" action="/admin/login">
+            <label for="password">管理密码</label>
+            <input type="password" id="password" name="password"
+                   placeholder="请输入密码"
+                   required autofocus autocomplete="off">
+            <button type="submit">登 录</button>
+        </form>
+        <a href="/form" class="back-link">← 返回登记表单</a>
+    </div>
+</body>
+</html>

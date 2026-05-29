@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>会员信息登记</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
+    <style>
+        :root {
+            --pico-font-size: 16px;
+        }
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 1rem;
+        }
+        .container {
+            max-width: 520px;
+            margin: 0 auto;
+            padding-top: 1rem;
+        }
+        .card {
+            background: #fff;
+            border-radius: 16px;
+            padding: 2rem 1.5rem;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+        }
+        .card h1 {
+            text-align: center;
+            color: #4a3f7a;
+            margin-bottom: 0.25rem;
+            font-size: 1.5rem;
+        }
+        .card .subtitle {
+            text-align: center;
+            color: #888;
+            font-size: 0.85rem;
+            margin-bottom: 1.5rem;
+        }
+        .card label {
+            font-weight: 600;
+            color: #333;
+        }
+        .card input,
+        .card select,
+        .card textarea {
+            border-radius: 8px;
+            border: 1.5px solid #ddd;
+            transition: border-color 0.2s;
+        }
+        .card input:focus,
+        .card select:focus,
+        .card textarea:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102,126,234,0.15);
+            outline: none;
+        }
+        .card button {
+            width: 100%;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border: none;
+            padding: 0.85rem;
+            font-size: 1.05rem;
+            font-weight: 600;
+            transition: opacity 0.2s;
+        }
+        .card button:hover {
+            opacity: 0.9;
+        }
+        .errors {
+            background: #fff0f0;
+            border: 1px solid #fcc;
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            margin-bottom: 1rem;
+            color: #c0392b;
+            font-size: 0.9rem;
+        }
+        .errors li {
+            margin: 0;
+        }
+        .required-mark {
+            color: #e74c3c;
+        }
+        footer {
+            text-align: center;
+            color: rgba(255,255,255,0.7);
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <h1>📋 会员信息登记</h1>
+            <p class="subtitle">请如实填写以下信息，提交后由工作人员审核</p>
+
+            {% if errors %}
+            <div class="errors">
+                <ul>
+                    {% for error in errors %}
+                    <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+
+            <form method="POST" action="/submit" id="regForm">
+                <label for="name">
+                    姓名 <span class="required-mark">*</span>
+                </label>
+                <input type="text" id="name" name="name"
+                       placeholder="请输入您的真实姓名"
+                       value="{{ form_data.name if form_data else '' }}"
+                       required maxlength="50">
+
+                <label for="phone">
+                    手机号 <span class="required-mark">*</span>
+                </label>
+                <input type="tel" id="phone" name="phone"
+                       placeholder="请输入11位手机号"
+                       value="{{ form_data.phone if form_data else '' }}"
+                       required maxlength="11" pattern="1[3-9]\d{9}">
+
+                <label for="membership_type">
+                    会员类型 <span class="required-mark">*</span>
+                </label>
+                <select id="membership_type" name="membership_type" required>
+                    <option value="" disabled {% if not form_data or not form_data.membership_type %}selected{% endif %}>请选择会员类型</option>
+                    {% for mtype in membership_types %}
+                    <option value="{{ mtype }}" {% if form_data and form_data.membership_type == mtype %}selected{% endif %}>{{ mtype }}</option>
+                    {% endfor %}
+                </select>
+
+                <label for="account_id">
+                    会员账号/ID
+                </label>
+                <input type="text" id="account_id" name="account_id"
+                       placeholder="选填，对应平台的账号名或ID"
+                       value="{{ form_data.account_id if form_data else '' }}"
+                       maxlength="100">
+
+                <label for="remarks">
+                    备注
+                </label>
+                <textarea id="remarks" name="remarks"
+                          placeholder="选填，其他需要说明的信息"
+                          rows="2" maxlength="200">{{ form_data.remarks if form_data else '' }}</textarea>
+
+                <button type="submit">✅ 提交登记</button>
+            </form>
+        </div>
+        <footer>&copy; 2026 业务管理系统 · 信息仅用于业务对接</footer>
+    </div>
+
+    <script>
+    // 客户端表单校验增强
+    document.getElementById('regForm').addEventListener('submit', function(e) {
+        const phone = document.getElementById('phone').value.trim();
+        const phonePattern = /^1[3-9]\d{9}$/;
+        if (!phonePattern.test(phone)) {
+            e.preventDefault();
+            alert('请输入正确的11位手机号');
+            return false;
+        }
+    });
+    </script>
+</body>
+</html>
